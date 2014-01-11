@@ -33,7 +33,7 @@ coprs :: String -> IO Coprs
 coprs username = do
   c <- coprConnection
   q <- buildRequest $ do
-    http GET ("/api/coprs/" `mappend` (C8.pack username) `mappend` "/")
+    http GET ("/api/coprs/" `mappend` C8.pack username `mappend` "/")
     setAccept "application/json"
 
   sendRequest c q emptyBody
