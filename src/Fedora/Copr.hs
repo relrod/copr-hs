@@ -18,15 +18,20 @@ module Fedora.Copr
     , Username
     , defaultConfig
     , withConfig
+    , addBuild
+    , buildStatus
     , coprs
     , new
     ) where
 
+import Fedora.Copr.CoprBuild (CoprBuild, CoprBuildResponse)
 import Fedora.Copr.ListCoprs (Coprs)
 import Fedora.Copr.NewCopr (CoprProject, NewCoprResponse)
+import Fedora.Copr.CoprStatus (CoprStatusResponse)
 
 import Data.Aeson
 import qualified Data.ByteString as S
+import qualified Data.ByteString.Char8 as C8
 import qualified Data.ByteString.Lazy as LS
 import Data.Monoid (mappend)
 import Network.Http.Client
@@ -40,6 +45,7 @@ data CoprConfig = CoprConfig {
 } deriving (Eq, Show)
 
 type Username = S.ByteString
+type ProjectName = S.ByteString
 
 defaultConfig :: CoprConfig
 defaultConfig = CoprConfig {
@@ -109,9 +115,31 @@ coprs u = apiGet ("/api/coprs/" `mappend` u `mappend` "/")
 --
 --   This makes use of the @\/api\/coprs/[username]\/new\/@ endpoint.
 --
---   > withConfig c $ new "codeblock" (CoprProject "foo" [] [] ["fedora-20-x86_64"])
+--   > withConfig c $ new "codeblock" (CoprProject "testproject" [] [] (NEL.fromList ["fedora-20-x86_64"]))
 new :: Username       -- ^ The username of the person whose project should be created.
     -> CoprProject    -- ^ The copr project to be created.
     -> CoprConfig     -- ^ The configuration to use.
     -> IO NewCoprResponse
 new u = apiPost ("/api/coprs/" `mappend` u `mappend` "/new/")
+
+-- | Add a build to a copr project.
+--
+--   This makes use of the @\/api\/coprs/[username]\/[project]\/new_build\/@ endpoint.
+--
+--   > withConfig c $ addBuild "codeblock" "testproject" (CoprBuild (NEL.fromList ["http://example.com/foo-1.0.0.src.rpm"]) 2048 3600)
+addBuild :: Username    -- ^ The username of the person who owns the copr project.
+         -> ProjectName -- ^ The project to add the build to.
+         -> CoprBuild   -- ^ A representation of the build to add.
+         -> CoprConfig  -- ^ The configuration to use.
+         -> IO CoprBuildResponse
+addBuild u p = apiPost ("/api/coprs/" `mappend` u `mappend` "/" `mappend` p `mappend` "/new_build/")
+
+-- | Check the status of a copr build
+--
+--   This makes use of the @\/api\/coprs\/build_status/[build_id]\/@ endpoint.
+--
+--   > withConfig c $ buildStatus 1033
+buildStatus :: Int        -- ^ The build ID number to check.
+            -> CoprConfig -- ^ The configuration to use.
+            -> IO CoprStatusResponse
+buildStatus i = apiGet ("/api/coprs/build_status/" `mappend` (C8.pack (show i)) `mappend` "/")
