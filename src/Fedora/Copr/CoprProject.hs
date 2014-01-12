@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Fedora.Copr.NewCopr (
+module Fedora.Copr.CoprProject (
     CoprProject (..)
   , NewCoprResponse (..)) where
 

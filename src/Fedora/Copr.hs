@@ -25,10 +25,10 @@ module Fedora.Copr
     , new
     ) where
 
-import Fedora.Copr.CoprBuild  as C (CoprBuild (), CoprBuildResponse ())
-import Fedora.Copr.CoprStatus as C (CoprStatusResponse ())
-import Fedora.Copr.ListCoprs  as C (Coprs ())
-import Fedora.Copr.NewCopr    as C (CoprProject (), NewCoprResponse ())
+import Fedora.Copr.CoprBuild   as C (CoprBuild (), CoprBuildResponse ())
+import Fedora.Copr.CoprProject as C (CoprProject (), NewCoprResponse ())
+import Fedora.Copr.CoprStatus  as C (CoprStatusResponse ())
+import Fedora.Copr.ListCoprs   as C (Coprs ())
 
 import Data.Aeson
 import qualified Data.ByteString as S

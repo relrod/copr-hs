@@ -16,9 +16,9 @@ cabal-version:       >=1.10
 library
   exposed-modules:     Fedora.Copr
                      , Fedora.Copr.CoprBuild
+                     , Fedora.Copr.CoprProject
                      , Fedora.Copr.CoprStatus
                      , Fedora.Copr.ListCoprs
-                     , Fedora.Copr.NewCopr
 
   build-depends:       aeson >= 0.6
                      , base >=4.6 && <4.7
