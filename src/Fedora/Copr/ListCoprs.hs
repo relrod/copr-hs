@@ -12,7 +12,8 @@ import Data.Map (Map)
 
 data Coprs = Coprs {
     output :: String
-  , repos  :: [Repo]
+  , repos  :: Maybe [Repo]
+  , error  :: Maybe String
 } deriving (Eq, Show)
 
 data Repo = Repo {
@@ -35,5 +36,6 @@ instance FromJSON Repo where
 instance FromJSON Coprs where
   parseJSON (Object v) = Coprs <$>
                              v .: "output"
-                         <*> v .: "repos"
+                         <*> v .:? "repos"
+                         <*> v .:? "error"
   parseJSON _          = mzero
