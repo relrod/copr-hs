@@ -49,6 +49,12 @@ defaultConfig = CoprConfig {
   , token = ""
 }
 
+-- | A utility wrapper for calling API methods with a 'CoprConfig'.
+--
+--   You can use this to do things like:
+--
+--   >>> let c = defaultConfig { login = "your_login", token = "your_token" }
+--   >>> withConfig c $ coprs "codeblock"
 withConfig :: CoprConfig -> (CoprConfig -> IO a) -> IO a
 withConfig = flip id
 
@@ -93,6 +99,8 @@ apiPost url d c = do
 -- | Retrieve a list of copr projects for an individual user.
 --
 --   This makes use of the @\/api\/coprs/[username]\/@ endpoint.
+--
+--   > withConfig c $ coprs "codeblock"
 coprs :: Username   -- ^ The username of the person whose projects we want to list.
       -> CoprConfig -- ^ The configuration to use.
       -> IO Coprs
@@ -101,6 +109,8 @@ coprs u c = apiGet ("/api/coprs/" `mappend` u `mappend` "/") c
 -- | Create a new copr project.
 --
 --   This makes use of the @\/api\/coprs/[username]\/new\/@ endpoint.
+--
+--   > withConfig c $ new "codeblock" (CoprProject "foo" [] [] ["fedora-20-x86_64"])
 new :: Username       -- ^ The username of the person whose project should be created.
     -> CoprProject    -- ^ The copr project to be created.
     -> CoprConfig     -- ^ The configuration to use.
