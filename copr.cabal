@@ -1,6 +1,8 @@
 name:                copr
 version:             1.0.0
 synopsis:            Haskell interface to the Fedora Copr system
+description:
+  This provides a Haskell interface to the Fedora Copr public build system.
 homepage:            https://github.com/CodeBlock/copr-hs
 license:             BSD3
 license-file:        LICENSE
@@ -13,9 +15,11 @@ cabal-version:       >=1.10
 
 library
   exposed-modules:     Fedora.Copr
+                     , Fedora.Copr.CoprBuild
+                     , Fedora.Copr.CoprStatus
                      , Fedora.Copr.ListCoprs
-  -- other-modules:       
-  -- other-extensions:    
+                     , Fedora.Copr.NewCopr
+
   build-depends:       aeson >= 0.6
                      , base >=4.6 && <4.7
                      , bytestring >= 0.10
@@ -26,12 +30,17 @@ library
                      , text >= 0.11
   hs-source-dirs:      src
   default-language:    Haskell2010
-  ghc-options:         -Wall -threaded
+  ghc-options:         -Wall
 
 test-suite hlint
   hs-source-dirs:      tests
   main-is:             hlint.hs
   type:                exitcode-stdio-1.0
+  default-language:    Haskell2010
   ghc-options:         -Wall -threaded -rtsopts -with-rtsopts=-N
   build-depends:       base
                      , hlint >= 1.7
+
+source-repository head
+  type:     git
+  location: git://github.com/CodeBlock/copr-hs.git

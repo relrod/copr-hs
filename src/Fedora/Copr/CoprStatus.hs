@@ -6,7 +6,6 @@ module Fedora.Copr.CoprStatus (
 import Control.Applicative
 import Control.Monad (mzero)
 import Data.Aeson
-import qualified Data.ByteString as S
 
 data CoprStatusResponse = CoprStatusResponse {
     output :: String

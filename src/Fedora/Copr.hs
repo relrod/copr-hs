@@ -14,7 +14,8 @@
 
 module Fedora.Copr
     (
-      CoprConfig (..)
+      module C
+    , CoprConfig (..)
     , Username
     , defaultConfig
     , withConfig
@@ -24,10 +25,10 @@ module Fedora.Copr
     , new
     ) where
 
-import Fedora.Copr.CoprBuild (CoprBuild, CoprBuildResponse)
-import Fedora.Copr.ListCoprs (Coprs)
-import Fedora.Copr.NewCopr (CoprProject, NewCoprResponse)
-import Fedora.Copr.CoprStatus (CoprStatusResponse)
+import Fedora.Copr.CoprBuild  as C (CoprBuild (), CoprBuildResponse ())
+import Fedora.Copr.CoprStatus as C (CoprStatusResponse ())
+import Fedora.Copr.ListCoprs  as C (Coprs ())
+import Fedora.Copr.NewCopr    as C (CoprProject (), NewCoprResponse ())
 
 import Data.Aeson
 import qualified Data.ByteString as S
