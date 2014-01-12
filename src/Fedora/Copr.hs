@@ -58,6 +58,20 @@ defaultConfig = CoprConfig {
 withConfig :: CoprConfig -> (CoprConfig -> IO a) -> IO a
 withConfig = flip id
 
+-- | Sets things that are common to all requests that we make.
+prepareRequest :: CoprConfig -> Method -> S.ByteString -> RequestBuilder ()
+prepareRequest c m url = do
+  http m url
+  setAccept "application/json"
+  setContentType "application/json"
+  setAuthorizationBasic (login c) (token c)
+
+finishRequest :: FromJSON a => Connection -> IO a
+finishRequest cnx = do
+  x <- receiveResponse cnx jsonHandler
+  closeConnection cnx
+  return x
+
 -- | Perform a GET request to the API, with authentication.
 --
 --   Requests that don't need authentication result in the authentication
@@ -66,35 +80,20 @@ withConfig = flip id
 apiGet :: FromJSON a => S.ByteString -> CoprConfig -> IO a
 apiGet url c = do
   cnx <- openConnection (domain c) (port c)
-  q <- buildRequest $ do
-    http GET url
-    setAccept "application/json"
-    setContentType "application/json"
-    setAuthorizationBasic (login c) (token c)
-
+  q <- buildRequest $ prepareRequest c GET url
   sendRequest cnx q emptyBody
-  x <- receiveResponse cnx jsonHandler
-  closeConnection cnx
-  return x
+  finishRequest cnx
 
 -- | Perform a POST request to the API, with authentication.
 apiPost :: (ToJSON a, FromJSON b) => S.ByteString -> a -> CoprConfig -> IO b
 apiPost url d c = do
   cnx <- openConnection (domain c) (port c)
-
   q <- buildRequest $ do
-    http POST url
-    setAccept "application/json"
-    setContentType "application/json"
-    setAuthorizationBasic (login c) (token c)
+    prepareRequest c POST url
     setContentLength $ LS.length (encode d)
-
   body <- SBS.fromLazyByteString (encode d)
   sendRequest cnx q (inputStreamBody body)
-  x <- receiveResponse cnx jsonHandler
-  closeConnection cnx
-  return x
-
+  finishRequest cnx
 
 -- | Retrieve a list of copr projects for an individual user.
 --
@@ -104,7 +103,7 @@ apiPost url d c = do
 coprs :: Username   -- ^ The username of the person whose projects we want to list.
       -> CoprConfig -- ^ The configuration to use.
       -> IO Coprs
-coprs u c = apiGet ("/api/coprs/" `mappend` u `mappend` "/") c
+coprs u = apiGet ("/api/coprs/" `mappend` u `mappend` "/")
 
 -- | Create a new copr project.
 --
@@ -115,4 +114,4 @@ new :: Username       -- ^ The username of the person whose project should be cr
     -> CoprProject    -- ^ The copr project to be created.
     -> CoprConfig     -- ^ The configuration to use.
     -> IO NewCoprResponse
-new u p c = apiPost ("/api/coprs/" `mappend` u `mappend` "/new/") p c
+new u = apiPost ("/api/coprs/" `mappend` u `mappend` "/new/")

@@ -40,4 +40,4 @@ instance ToJSON CoprProject where
                                           , "initial_pkgs" .= S.intercalate " " p
                                           , "description" .= d
                                           , "instructions" .= i
-                                          ] ++ map (\x -> (T.pack $ C8.unpack x) .= C8.pack "y") (NEL.toList c)
+                                          ] ++ map (\x -> T.pack (C8.unpack x) .= C8.pack "y") (NEL.toList c)
