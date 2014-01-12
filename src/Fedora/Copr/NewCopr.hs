@@ -15,7 +15,7 @@ import qualified Data.Text as T
 data NewCoprResponse = NewCoprResponse {
     output  :: String
   , message :: Maybe String
-  , error  :: Maybe String
+  , error   :: Maybe String
 } deriving (Eq, Show)
 
 instance FromJSON NewCoprResponse where
@@ -26,12 +26,12 @@ instance FromJSON NewCoprResponse where
   parseJSON _          = mzero
 
 data CoprProject = CoprProject {
-    name :: S.ByteString
-  , repos :: [S.ByteString]
+    name            :: S.ByteString
+  , repos           :: [S.ByteString]
   , initialPackages :: [S.ByteString]
-  , chroots :: NEL.NonEmpty S.ByteString
-  , description :: Maybe S.ByteString
-  , instructions :: Maybe S.ByteString
+  , chroots         :: NEL.NonEmpty S.ByteString
+  , description     :: Maybe S.ByteString
+  , instructions    :: Maybe S.ByteString
 } deriving (Eq, Show)
 
 instance ToJSON CoprProject where
