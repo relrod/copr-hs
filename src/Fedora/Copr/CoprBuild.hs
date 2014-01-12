@@ -32,7 +32,7 @@ data CoprBuild = CoprBuild {
 } deriving (Eq, Show)
 
 instance ToJSON CoprBuild where
-  toJSON (CoprBuild p m t) = object $ [ "pkgs" .= S.intercalate " " (NEL.toList p)
-                                      , "memory" .= m
-                                      , "timeout" .= t
-                                      ]
+  toJSON (CoprBuild p m t) = object [ "pkgs" .= S.intercalate " " (NEL.toList p)
+                                    , "memory" .= m
+                                    , "timeout" .= t
+                                    ]

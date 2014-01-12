@@ -142,4 +142,4 @@ addBuild u p = apiPost ("/api/coprs/" `mappend` u `mappend` "/" `mappend` p `map
 buildStatus :: Int        -- ^ The build ID number to check.
             -> CoprConfig -- ^ The configuration to use.
             -> IO CoprStatusResponse
-buildStatus i = apiGet ("/api/coprs/build_status/" `mappend` (C8.pack (show i)) `mappend` "/")
+buildStatus i = apiGet ("/api/coprs/build_status/" `mappend` C8.pack (show i) `mappend` "/")
