@@ -34,7 +34,7 @@ import Data.Aeson
 import qualified Data.ByteString as S
 import qualified Data.ByteString.Char8 as C8
 import qualified Data.ByteString.Lazy as LS
-import Data.Monoid (mappend)
+import Data.Monoid ((<>))
 import Network.Http.Client
 import qualified System.IO.Streams.ByteString as SBS
 
@@ -110,7 +110,7 @@ apiPost url d c = do
 coprs :: Username   -- ^ The username of the person whose projects we want to list.
       -> CoprConfig -- ^ The configuration to use.
       -> IO Coprs
-coprs u = apiGet ("/api/coprs/" `mappend` u `mappend` "/")
+coprs u = apiGet ("/api/coprs/" <> u <> "/")
 
 -- | Create a new copr project.
 --
@@ -121,7 +121,7 @@ new :: Username       -- ^ The username of the person whose project should be cr
     -> CoprProject    -- ^ The copr project to be created.
     -> CoprConfig     -- ^ The configuration to use.
     -> IO NewCoprResponse
-new u = apiPost ("/api/coprs/" `mappend` u `mappend` "/new/")
+new u = apiPost ("/api/coprs/" <> u <> "/new/")
 
 -- | Add a build to a copr project.
 --
@@ -133,7 +133,7 @@ addBuild :: Username    -- ^ The username of the person who owns the copr projec
          -> CoprBuild   -- ^ A representation of the build to add.
          -> CoprConfig  -- ^ The configuration to use.
          -> IO CoprBuildResponse
-addBuild u p = apiPost ("/api/coprs/" `mappend` u `mappend` "/" `mappend` p `mappend` "/new_build/")
+addBuild u p = apiPost ("/api/coprs/" <> u <> "/" <> p <> "/new_build/")
 
 -- | Check the status of a copr build
 --
@@ -143,4 +143,4 @@ addBuild u p = apiPost ("/api/coprs/" `mappend` u `mappend` "/" `mappend` p `map
 buildStatus :: Int        -- ^ The build ID number to check.
             -> CoprConfig -- ^ The configuration to use.
             -> IO CoprStatusResponse
-buildStatus i = apiGet ("/api/coprs/build_status/" `mappend` C8.pack (show i) `mappend` "/")
+buildStatus i = apiGet ("/api/coprs/build_status/" <> C8.pack (show i) <> "/")
