@@ -104,7 +104,7 @@ apiPost url d c = do
 
 -- | Retrieve a list of copr projects for an individual user.
 --
---   This makes use of the @\/api\/coprs/[username]\/@ endpoint.
+--   This makes use of the @\/api\/coprs\/[username]\/@ endpoint.
 --
 --   > withConfig c $ coprs "codeblock"
 coprs :: Username   -- ^ The username of the person whose projects we want to list.
@@ -114,7 +114,7 @@ coprs u = apiGet ("/api/coprs/" <> u <> "/")
 
 -- | Create a new copr project.
 --
---   This makes use of the @\/api\/coprs/[username]\/new\/@ endpoint.
+--   This makes use of the @\/api\/coprs\/[username]\/new\/@ endpoint.
 --
 --   > withConfig c $ new "codeblock" (CoprProject "testproject" [] [] (NEL.fromList ["fedora-20-x86_64"]))
 new :: Username       -- ^ The username of the person whose project should be created.
@@ -137,7 +137,7 @@ addBuild u p = apiPost ("/api/coprs/" <> u <> "/" <> p <> "/new_build/")
 
 -- | Check the status of a copr build
 --
---   This makes use of the @\/api\/coprs\/build_status/[build_id]\/@ endpoint.
+--   This makes use of the @\/api\/coprs\/build_status\/[build_id]\/@ endpoint.
 --
 --   > withConfig c $ buildStatus 1033
 buildStatus :: Int        -- ^ The build ID number to check.
