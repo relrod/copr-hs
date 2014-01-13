@@ -135,7 +135,7 @@ addBuild :: Username    -- ^ The username of the person who owns the copr projec
          -> IO CoprBuildResponse
 addBuild u p = apiPost ("/api/coprs/" <> u <> "/" <> p <> "/new_build/")
 
--- | Check the status of a copr build
+-- | Check the status of a copr build.
 --
 --   This makes use of the @\/api\/coprs\/build_status\/[build_id]\/@ endpoint.
 --
