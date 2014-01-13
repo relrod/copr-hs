@@ -17,6 +17,7 @@ module Fedora.Copr
       module C
     , CoprConfig (..)
     , Username
+    , ProjectName
     , defaultConfig
     , withConfig
     , addBuild
