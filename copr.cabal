@@ -25,6 +25,7 @@ library
                      , bytestring >= 0.10
                      , containers >= 0.5
                      , http-streams >= 0.7
+                     , HsOpenSSL >= 0.10
                      , io-streams >= 1.1
                      , semigroups >= 0.12
                      , text >= 0.11

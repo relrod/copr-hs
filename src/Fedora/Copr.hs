@@ -37,11 +37,13 @@ import qualified Data.ByteString.Char8 as C8
 import qualified Data.ByteString.Lazy as LS
 import Data.Monoid ((<>))
 import Network.Http.Client
+import OpenSSL (withOpenSSL)
 import qualified System.IO.Streams.ByteString as SBS
 
 data CoprConfig = CoprConfig {
     domain :: Hostname     -- ^ The domain on which Copr is hosted.
   , port   :: Port         -- ^ The port on which Copr operates.
+  , ssl    :: Bool         -- ^ Should we use SSL or Plain Text?
   , login  :: S.ByteString -- ^ The API login (/not/ the same as username).
   , token  :: S.ByteString -- ^ The API token.
 } deriving (Eq, Show)
@@ -52,9 +54,10 @@ type ProjectName = S.ByteString
 defaultConfig :: CoprConfig
 defaultConfig = CoprConfig {
     domain = "copr.fedoraproject.org"
-  , port = 80
-  , login = ""
-  , token = ""
+  , port   = 80
+  , ssl    = False
+  , login  = ""
+  , token  = ""
 }
 
 -- | A utility wrapper for calling API methods with a 'CoprConfig'.
@@ -86,16 +89,26 @@ finishRequest cnx = do
 --   details being ignored, so we don't have to worry about not sending them
 --   in that case.
 apiGet :: FromJSON a => S.ByteString -> CoprConfig -> IO a
-apiGet url c = do
-  cnx <- openConnection (domain c) (port c)
+apiGet url c = withOpenSSL $ do
+  cnx <- if ssl c
+         then do
+           ctx <- baselineContextSSL
+           openConnectionSSL ctx (domain c) (port c)
+         else
+           openConnection (domain c) (port c)
   q <- buildRequest $ prepareRequest c GET url
   sendRequest cnx q emptyBody
   finishRequest cnx
 
 -- | Perform a POST request to the API, with authentication.
 apiPost :: (ToJSON a, FromJSON b) => S.ByteString -> a -> CoprConfig -> IO b
-apiPost url d c = do
-  cnx <- openConnection (domain c) (port c)
+apiPost url d c = withOpenSSL $ do
+  cnx <- if ssl c
+         then do
+           ctx <- baselineContextSSL
+           openConnectionSSL ctx (domain c) (port c)
+         else
+           openConnection (domain c) (port c)
   q <- buildRequest $ do
     prepareRequest c POST url
     setContentLength $ LS.length (encode d)
