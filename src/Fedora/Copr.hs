@@ -120,7 +120,7 @@ apiPost url d c = withOpenSSL $ do
 --
 --   This makes use of the @\/api\/coprs\/[username]\/@ endpoint.
 --
---   > withConfig c $ coprs "codeblock"
+--   >>> withConfig c $ coprs "codeblock"
 coprs :: Username   -- ^ The username of the person whose projects we want to list.
       -> CoprConfig -- ^ The configuration to use.
       -> IO Coprs
@@ -130,7 +130,7 @@ coprs u = apiGet ("/api/coprs/" <> u <> "/")
 --
 --   This makes use of the @\/api\/coprs\/[username]\/new\/@ endpoint.
 --
---   > withConfig c $ new "codeblock" (CoprProject "testproject" [] [] (NEL.fromList ["fedora-20-x86_64"]))
+--   >>> withConfig c $ new "codeblock" (CoprProject "testproject" [] [] (NEL.fromList ["fedora-20-x86_64"]))
 new :: Username       -- ^ The username of the person whose project should be created.
     -> CoprProject    -- ^ The copr project to be created.
     -> CoprConfig     -- ^ The configuration to use.
@@ -141,7 +141,7 @@ new u = apiPost ("/api/coprs/" <> u <> "/new/")
 --
 --   This makes use of the @\/api\/coprs/[username]\/[project]\/new_build\/@ endpoint.
 --
---   > withConfig c $ addBuild "codeblock" "testproject" (CoprBuild (NEL.fromList ["http://example.com/foo-1.0.0.src.rpm"]) 2048 3600)
+--   >>> withConfig c $ addBuild "codeblock" "testproject" (CoprBuild (NEL.fromList ["http://example.com/foo-1.0.0.src.rpm"]) 2048 3600)
 addBuild :: Username    -- ^ The username of the person who owns the copr project.
          -> ProjectName -- ^ The project to add the build to.
          -> CoprBuild   -- ^ A representation of the build to add.
@@ -153,7 +153,7 @@ addBuild u p = apiPost ("/api/coprs/" <> u <> "/" <> p <> "/new_build/")
 --
 --   This makes use of the @\/api\/coprs\/build_status\/[build_id]\/@ endpoint.
 --
---   > withConfig c $ buildStatus 1033
+--   >>> withConfig c $ buildStatus 1033
 buildStatus :: Int        -- ^ The build ID number to check.
             -> CoprConfig -- ^ The configuration to use.
             -> IO CoprStatusResponse
