@@ -1,5 +1,5 @@
 name:                copr
-version:             1.0.0
+version:             1.1.0
 synopsis:            Haskell interface to the Fedora Copr system
 description:
   This provides a Haskell interface to the Fedora Copr public build system.
