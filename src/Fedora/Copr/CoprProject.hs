@@ -7,8 +7,6 @@ module Fedora.Copr.CoprProject (
 import Control.Applicative
 import Control.Monad (mzero)
 import Data.Aeson
-import qualified Data.ByteString as S
-import qualified Data.ByteString.Char8 as C8
 import qualified Data.List.NonEmpty as NEL
 import qualified Data.Text as T
 
@@ -26,18 +24,18 @@ instance FromJSON NewCoprResponse where
   parseJSON _          = mzero
 
 data CoprProject = CoprProject {
-    name            :: S.ByteString
-  , repos           :: [S.ByteString]
-  , initialPackages :: [S.ByteString]
-  , chroots         :: NEL.NonEmpty S.ByteString
-  , description     :: Maybe S.ByteString
-  , instructions    :: Maybe S.ByteString
+    name            :: T.Text
+  , repos           :: [T.Text]
+  , initialPackages :: [T.Text]
+  , chroots         :: NEL.NonEmpty T.Text
+  , description     :: Maybe T.Text
+  , instructions    :: Maybe T.Text
 } deriving (Eq, Show)
 
 instance ToJSON CoprProject where
   toJSON (CoprProject n r p c d i) = object $ [ "name" .= n
-                                          , "repos" .= S.intercalate " " r
-                                          , "initial_pkgs" .= S.intercalate " " p
+                                          , "repos" .= T.intercalate " " r
+                                          , "initial_pkgs" .= T.intercalate " " p
                                           , "description" .= d
                                           , "instructions" .= i
-                                          ] ++ map (\x -> T.pack (C8.unpack x) .= C8.pack "y") (NEL.toList c)
+                                          ] ++ map (\x -> x .= (T.pack "y")) (NEL.toList c)

@@ -7,8 +7,8 @@ module Fedora.Copr.CoprBuild (
 import Control.Applicative
 import Control.Monad (mzero)
 import Data.Aeson
-import qualified Data.ByteString as S
 import qualified Data.List.NonEmpty as NEL
+import qualified Data.Text as T
 
 data CoprBuildResponse = CoprBuildResponse {
     output  :: String
@@ -26,13 +26,13 @@ instance FromJSON CoprBuildResponse where
   parseJSON _          = mzero
 
 data CoprBuild = CoprBuild {
-    packages :: NEL.NonEmpty S.ByteString
+    packages :: NEL.NonEmpty T.Text
   , memory   :: Int
   , timeout  :: Int
 } deriving (Eq, Show)
 
 instance ToJSON CoprBuild where
-  toJSON (CoprBuild p m t) = object [ "pkgs" .= S.intercalate " " (NEL.toList p)
+  toJSON (CoprBuild p m t) = object [ "pkgs" .= T.intercalate " " (NEL.toList p)
                                     , "memory" .= m
                                     , "timeout" .= t
                                     ]

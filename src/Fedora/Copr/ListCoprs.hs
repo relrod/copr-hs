@@ -7,8 +7,8 @@ module Fedora.Copr.ListCoprs (
 import Control.Applicative
 import Control.Monad (mzero)
 import Data.Aeson
-import qualified Data.ByteString as S
 import Data.Map (Map)
+import qualified Data.Text as T
 
 data Coprs = Coprs {
     output :: String
@@ -17,11 +17,11 @@ data Coprs = Coprs {
 } deriving (Eq, Show)
 
 data Repo = Repo {
-    yumRepos        :: Map S.ByteString S.ByteString
-  , additionalRepos :: S.ByteString
-  , instructions    :: S.ByteString
-  , name            :: S.ByteString
-  , description     :: S.ByteString
+    yumRepos        :: Map T.Text T.Text
+  , additionalRepos :: T.Text
+  , instructions    :: T.Text
+  , name            :: T.Text
+  , description     :: T.Text
 } deriving (Eq, Show)
 
 instance FromJSON Repo where
