@@ -9,7 +9,7 @@ license-file:        LICENSE
 author:              Ricky Elrod
 maintainer:          ricky@elrod.me
 copyright:           2014 Ricky Elrod
-category:            Fedora
+category:            Fedora, Web
 build-type:          Simple
 cabal-version:       >=1.10
 
