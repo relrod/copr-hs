@@ -8,7 +8,7 @@ license:             BSD3
 license-file:        LICENSE
 author:              Ricky Elrod
 maintainer:          ricky@elrod.me
-copyright:           2014 Ricky Elrod
+copyright:           2015 Ricky Elrod
 category:            Fedora, Web
 build-type:          Simple
 cabal-version:       >=1.10
@@ -21,7 +21,7 @@ library
                      , Fedora.Copr.ListCoprs
 
   build-depends:       aeson >= 0.6
-                     , base >=4.6 && <4.8
+                     , base >= 4 && < 5
                      , bytestring >= 0.10
                      , containers >= 0.5
                      , http-streams >= 0.7
